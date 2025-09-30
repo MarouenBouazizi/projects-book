@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marouen Bouazizi - Lead Developer Backend Node.js/TypeScript</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #0ea5e9;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light-gray: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--white);
+        }
+
+        /* Header & Navigation */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+        }
+
+        .hero p {
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            font-size: 1.1rem;
+            opacity: 0.9;
+            animation: fadeInUp 0.8s ease 0.4s backwards;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease 0.6s backwards;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--white);
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Section Titles */
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--dark);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            margin: 1rem auto 0;
+        }
+
+        /* Stats Section */
+        .stats {
+            background: var(--light-gray);
+            padding: 4rem 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-card {
+            padding: 2rem;
+            background: var(--light-gray);
+            border-radius: 10px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .skill-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            padding: 0.4rem 0.8rem;
+            background: var(--white);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--dark);
+        }
+
+        /* Projects Section */
+        .projects {
+            background: var(--light-gray);
+        }
+
+        .project-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .project-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 2rem;
+        }
+
+        .project-header h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-company {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .project-body {
+            padding: 2rem;
+        }
+
+        .project-challenge, .project-action, .project-result {
+            margin-bottom: 1.5rem;
+        }
+
+        .project-challenge h4, .project-action h4, .project-result h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .project-meta {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .project-meta span {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Experience Section */
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: var(--primary);
+        }
+
+        .timeline-item {
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-content {
+            background: var(--light-gray);
+            padding: 2rem;
+            border-radius: 10px;
+            width: calc(50% - 3rem);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: auto;
+        }
+
+        .timeline-content h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.4rem;
+        }
+
+        .timeline-content .date {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-content ul {
+            list-style-position: inside;
+            color: var(--gray);
+        }
+
+        .timeline-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .contact-item a {
+            color: var(--white);
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .contact-item a:hover {
+            opacity: 0.8;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .timeline::before {
+                left: 0;
+            }
+
+            .timeline-content {
+                width: 100%;
+                margin-left: 2rem !important;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .contact-info {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">MB</div>
+            <ul class="nav-links">
+                <li><a href="#home">Accueil</a></li>
+                <li><a href="#about">À propos</a></li>
+                <li><a href="#skills">Compétences</a></li>
+                <li><a href="#projects">Projets</a></li>
+                <li><a href="#experience">Parcours</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <h1>Marouen Bouazizi</h1>
+        <div class="subtitle">Lead Developer Backend Node.js / TypeScript</div>
+        <p>Plus de 10 ans d'expérience dans le développement d'architectures backend robustes et scalables. Spécialisé dans la performance, la sécurité et l'innovation technique pour des projets à fort impact.</p>
+        <div class="cta-buttons">
+            <a href="#contact" class="btn btn-primary">Me Contacter</a>
+            <a href="https://www.linkedin.com/in/marouen-bouazizi/" target="_blank" class="btn btn-secondary">LinkedIn</a>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">10+</div>
+                <div class="stat-label">Années d'expérience</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">20M+</div>
+                <div class="stat-label">Requêtes/jour gérées</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">10ms</div>
+                <div class="stat-label">Temps de réponse moyen</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Audit sécurité réussi</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="container">
+        <h2 class="section-title">À Propos</h2>
+        <div style="max-width: 800px; margin: 0 auto; text-align: center; font-size: 1.1rem; color: var(--gray);">
+            <p>Lead développeur backend spécialisé en Node.js/TypeScript avec plus de 10 ans d'expérience, j'ai piloté des projets critiques à fort impact pour des grands groupes comme La Poste, notamment sur des sujets de performance, sécurité et scalabilité.</p>
+            <p style="margin-top: 1rem;">Engagé dans l'excellence technique, je conçois des API robustes, optimise les architectures et mets en place des pipelines CI/CD efficaces. Mon parcours m'a aussi permis de relever des défis innovants en IoT et smart agriculture, avec des résultats concrets primés à l'international.</p>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="container">
+        <h2 class="section-title">Compétences</h2>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <h3>Backend & Langages</h3>
+                <div class="skill-tags">
+                    <span class="tag">Node.js</span>
+                    <span class="tag">TypeScript</span>
+                    <span class="tag">JavaScript</span>
+                </div>
+            </div>
+            <div class="skill-card">
+                <h3>Bases de données</h3>
+                <div class="skill-tags">
+                    <span class="tag">MongoDB</span>
+                    <span class="tag">PostgreSQL</span>
+                    <span class="tag">MySQL</span>
+                    <span class="tag">Redis</span>
+                </div>
+            </div>
+            <div class="skill-card">
+                <h3>APIs</h3>
+                <div class="skill-tags">
+                    <span class="tag">REST API</span>
+                    <span class="tag">GraphQL</span>
+                </div>
+            </div>
+            <div class="skill-card">
+                <h3>Tests</h3>
+                <div class="skill-tags">
+                    <span class="tag">Jest</span>
+                    <span class="tag">Mocha</span>
+                    <span class="tag">Cypress</span>
+                </div>
+            </div>
+            <div class="skill-card">
+                <h3>DevOps</h3>
+                <div class="skill-tags">
+                    <span class="tag">Docker</span>
+                    <span class="tag">Kubernetes</span>
+                    <span class="tag">Ansible</span>
+                    <span class="tag">CI/CD</span>
+                </div>
+            </div>
+            <div class="skill-card">
+                <h3>Outils</h3>
+                <div class="skill-tags">
+                    <span class="tag">Git</span>
+                    <span class="tag">GitLab</span>
+                    <span class="tag">Bitbucket</span>
+                    <span class="tag">JIRA</span>
+                    <span class="tag">ELK</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2 class="section-title">Projets & Défis Relevés</h2>
+            <div class="project-grid">
+                <!-- Project 1 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>Optimisation Performance API Gateway</h3>
+                        <div class="project-company">La Poste Groupe</div>
+                    </div>
+                    <div class="project-body">
+                        <div class="project-challenge">
+                            <h4>🎯 Challenge</h4>
+                            <p>La performance de l'API Gateway devait être augmentée pour gérer un grand volume de requêtes tout en maintenant un temps de réponse minimal.</p>
+                        </div>
+                        <div class="project-action">
+                            <h4>⚡ Action</h4>
+                            <p>Migration de la gateway en TypeScript, mise en place d'optimisations avancées incluant des ajustements de configuration, une gestion efficace des caches, et une amélioration de la scalabilité.</p>
+                        </div>
+                        <div class="project-result">
+                            <h4>✨ Résultat</h4>
+                            <p><strong>20 millions de requêtes par jour</strong> avec un temps de réponse de <strong>10 ms</strong>.</p>
+                        </div>
+                        <div class="project-meta">
+                            <span>⏱️ Durée : 6 mois</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>Audit de Sécurité</h3>
+                        <div class="project-company">La Poste Groupe</div>
+                    </div>
+                    <div class="project-body">
+                        <div class="project-challenge">
+                            <h4>🎯 Challenge</h4>
+                            <p>L'application devait passer un audit de sécurité exigeant sans aucune vulnérabilité détectée.</p>
+                        </div>
+                        <div class="project-action">
+                            <h4>⚡ Action</h4>
+                            <p>Mise en place de pratiques de développement sécurisé, réalisation de tests de sécurité approfondis et implémentation de correctifs pour anticiper les vulnérabilités potentielles.</p>
+                        </div>
+                        <div class="project-result">
+                            <h4>✨ Résultat</h4>
+                            <p>L'application a passé l'audit de sécurité avec succès, <strong>sans aucune vulnérabilité détectée</strong>, garantissant sa conformité et renforçant la sécurité de la plateforme.</p>
+                        </div>
+                        <div class="project-meta">
+                            <span>⏱️ Durée : 1 mois</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>Couverture de Tests 100%</h3>
+                        <div class="project-company">Numeryx Technologies - Le Conservateur</div>
+                    </div>
+                    <div class="project-body">
+                        <div class="project-challenge">
+                            <h4>🎯 Challenge</h4>
+                            <p>Atteindre une couverture de test de 100% tout en assurant la qualité et la stabilité de chaque service et plugin via des tests de bout en bout.</p>
+                        </div>
+                        <div class="project-action">
+                            <h4>⚡ Action</h4>
+                            <p>Élaboration de tests unitaires complets, mise en place de tests E2E pour chaque service/plugin, automatisation des tests pour garantir une vérification continue.</p>
+                        </div>
+                        <div class="project-result">
+                            <h4>✨ Résultat</h4>
+                            <p>Projet finalisé avec une <strong>couverture de test de 100%</strong> et des tests E2E sur chaque composant, assurant une qualité de code optimale et une réduction drastique des erreurs en production.</p>
+                        </div>
+                        <div class="project-meta">
+                            <span>⏱️ Durée : 3 mois</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <h3>IoT & Smart Agriculture - Phyt'eau / IFarming</h3>
+                        <div class="project-company">Sofia Technologies</div>
+                    </div>
+                    <div class="project-body">
+                        <div class="project-challenge">
+                            <h4>🎯 Challenge</h4>
+                            <p>Développer une application capable de mesurer en temps réel la consommation d'eau d'un terrain agricole pour réduire l'utilisation d'eau.</p>
+                        </div>
+                        <div class="project-action">
+                            <h4>⚡ Action</h4>
+                            <p>Conception et développement de l'application, interaction avec des capteurs IoT pour mesurer la consommation en temps réel, analyse des données pour optimiser l'irrigation.</p>
+                        </div>
+                        <div class="project-result">
+                            <h4>✨ Résultat</h4>
+                            <p>Réduction de la consommation d'eau de <strong>40%</strong>, surpassant l'objectif initial de 20% et récompensée par le <strong>Premier Prix des Startups au Maroc</strong>.</p>
+                        </div>
+                        <div class="project-meta">
+                            <span>⏱️ Durée : 15 mois</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="container">
+        <h2 class="section-title">Parcours Professionnel</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Lead Developer Backend Node.js/TypeScript</h3>
+                    <div class="date">La Poste Groupe | Mai 2019 - Actuellement</div>
+                    <ul>
+                        <li>Gestion des risques de sécurité et vulnérabilités des dépendances</li>
+                        <li>Développement et maintien de l'API REST/GraphQL</li>
+                        <li>Mise en œuvre des pipelines CI/CD</li>
+                        <li>Contribution aux décisions d'architecture logicielle</li>
+                        <li>Participation active aux phases de planification et review des releases</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Développeur Backend Node.js/TypeScript</h3>
+                    <div class="date">Numeryx Technologies - Client: Le Conservateur | Mai 2018 - Avril 2019</div>
+                    <ul>
+                        <li>Conception et développement des APIs REST</li>
+                        <li>Mise en place des TNR et scénarios de tests</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Développeur Full-stack JavaScript</h3>
+                    <div class="date">Cynapsys - Client: CNES | Juillet 2017 - Avril 2018</div>
+                    <ul>
+                        <li>Conception et développement d'une application de gestion des satellites</li>
+                        <li>Développement d'une application de visualisation en temps réel</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>Développeur Web</h3>
+                    <div class="date">Sofia Technologies | Octobre 2013 - Juin 2017</div>
+                    <ul>
+                        <li>Client BioSerenity: Application de visualisation en temps réel</li>
+                        <li>Client Phyt'eau/IFarming: Plateforme Smart Agriculture (Prix international)</li>
+                        <li>Client Sourcing-force: Plateforme B2B de pilotage des achats</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <h2 class="section-title" style="color: white;">Me Contacter</h2>
+        <p style="max-width: 600px; margin: 0 auto 2rem;">Intéressé par mon profil ? N'hésitez pas à me contacter pour discuter de vos projets ou opportunités.</p>
+        <div class="contact-info">
+            <div class="contact-item">
+                <span>📧</span>
+                <a href="mailto:bouazizimarouen@gmail.com">bouazizimarouen@gmail.com</a>
+            </div>
+            <div class="contact-item">
+                <span>📱</span>
+                <a href="tel:+33668538964">+33 06 68 53 89 64</a>
+            </div>
+            <div class="contact-item">
+                <span>💼</span>
+                <a href="https://www.linkedin.com/in/marouen-bouazizi/" target="_blank">LinkedIn</a>
+            </div>
+            <div class="contact-item">
+                <span>📍</span>
+                <span>Elancourt, Yvelines, France</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Marouen Bouazizi. Tous droits réservés.</p>
+        <p style="margin-top: 0.5rem; opacity: 0.7;">Lead Developer Backend | Node.js & TypeScript Expert</p>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.8s ease forwards';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.skill-card, .project-card, .timeline-content, .stat-card').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
