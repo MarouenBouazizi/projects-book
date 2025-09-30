@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book de Projets - Marouen Bouazizi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #0ea5e9;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light-gray: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light-gray);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            animation: fadeInDown 0.8s ease 0.2s backwards;
+        }
+
+        .header .subtitle {
+            margin-top: 1rem;
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        /* Navigation Filters */
+        .filters {
+            background: var(--white);
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .filters-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1.5rem;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Project Card */
+        .project-card {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .project-card.hidden {
+            display: none;
+        }
+
+        .project-header {
+            position: relative;
+            padding: 2.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .project-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .project-header h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .project-company {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .project-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            padding: 0.3rem 0.8rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+
+        .project-body {
+            padding: 2rem;
+        }
+
+        .project-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .project-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+        }
+
+        .section-icon {
+            font-size: 1.3rem;
+        }
+
+        .section-content {
+            color: var(--gray);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .project-meta {
+            display: flex;
+            gap: 2rem;
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+            border-top: 2px solid var(--light-gray);
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .meta-item strong {
+            color: var(--dark);
+        }
+
+        /* Impact Stats */
+        .impact-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+            padding: 1.5rem;
+            background: var(--light-gray);
+            border-radius: 10px;
+        }
+
+        .impact-stat {
+            text-align: center;
+        }
+
+        .impact-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .impact-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        /* Tech Stack */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+        }
+
+        .tech-badge {
+            padding: 0.4rem 1rem;
+            background: var(--light-gray);
+            color: var(--dark);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Award Badge */
+        .award-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.2rem;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: var(--white);
+            border-radius: 10px;
+            font-weight: 600;
+            margin-top: 1rem;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        /* Key Results */
+        .key-results {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: var(--white);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+
+        .key-results h4 {
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+
+        .result-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .result-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        /* Statistics Summary */
+        .stats-summary {
+            max-width: 1400px;
+            margin: 0 auto 3rem;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--light-gray);
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.05);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-btn {
+                width: 100%;
+            }
+
+            .project-meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .filters {
+                display: none;
+            }
+            
+            .project-card {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>📚 Book de Projets</h1>
+        <p>Marouen Bouazizi - Lead Developer Backend Node.js/TypeScript</p>
+        <div class="subtitle">10+ années d'expertise • Projets à fort impact • Innovation & Performance</div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters">
+        <div class="filters-container">
+            <span class="filter-label">Filtrer par :</span>
+            <button class="filter-btn active" data-filter="all">Tous les projets</button>
+            <button class="filter-btn" data-filter="performance">Performance</button>
+            <button class="filter-btn" data-filter="security">Sécurité</button>
+            <button class="filter-btn" data-filter="testing">Testing</button>
+            <button class="filter-btn" data-filter="iot">IoT & Innovation</button>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Stats Summary -->
+        <div class="stats-summary">
+            <h2 style="text-align: center; color: var(--dark); margin-bottom: 0.5rem;">Impact Global</h2>
+            <p style="text-align: center; color: var(--gray); margin-bottom: 1rem;">Vue d'ensemble des réalisations</p>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">50M+</div>
+                    <div class="stat-label">Requêtes/jour</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">10ms</div>
+                    <div class="stat-label">Temps de réponse</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Couverture tests</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">40%</div>
+                    <div class="stat-label">Économie d'eau (IoT)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Vulnérabilités</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects Grid -->
+        <div class="projects-grid">
+            
+            <!-- Project 1: API Gateway Performance -->
+            <div class="project-card" data-category="performance">
+                <div class="project-header">
+                    <div>
+                        <div class="project-icon">⚡</div>
+                        <h3>Optimisation Performance API Gateway</h3>
+                        <div class="project-company">
+                            <span>🏢</span> La Poste Groupe
+                        </div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">Performance</span>
+                        <span class="tag">Scalabilité</span>
+                        <span class="tag">Architecture</span>
+                    </div>
+                </div>
+                <div class="project-body">
+                    <div class="project-section">
+                        <div class="section-title">
+                            <span class="section-icon">🎯</span>
+                            Challenge
+                        </div>
+                        <div class="section-content">
+                            La performance de l'API Gateway devait être augmentée pour gérer un grand volume de requêtes tout en maintenant un temps de réponse minimal. L'infrastructure existante montrait des signes de saturation avec des pics de latence inacceptables pour une application critique.
+                        </div>
+                    </div>
+
+                    <div class="project-section">
+                        <div class="section-title">
+                            <span class="section-icon">🔧</span>
+                            Solutions Mises en Œuvre
+                        </div>
+                        <div class="section-content">
+                            <ul style="list-style-position: inside; margin-top: 0.5rem;">
+                                <li>Migration complète de la gateway vers TypeScript pour améliorer la maintenabilité et les performances</li>
+                                <li>Optimisation avancée de la configuration système et des paramètres réseau</li>
+                                <li>Implémentation d'une stratégie de cache multi-niveaux (Redis, in-memory)</li>
+                                <li>Amélioration de la scalabilité horizontale avec load balancing optimisé</li>
+                                <li>Monitoring en temps réel avec alertes proactives</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="key-results">
+                        <h4>✨ Résultats Clés</h4>
+                        <div class="result-list">
+                            <div class="result-item">✓ 20 millions de requêtes par jour gérées sans dégradation</div>
+                            <div class="result-item">✓ Temps de réponse moyen de 10ms maintenu en production</div>
+                            <div class="result-item">✓ Réduction de 85% des erreurs de timeout</div>
+                            <div class="result-item">✓ Infrastructure capable de gérer 3x le trafic actuel</div>
+                        </div>
+                    </div>
+
+                    <div class="impact-stats">
+                        <div class="impact-stat">
+                            <span class="impact-number">50M+</span>
+                            <span class="impact-label">Requêtes/jour</span>
+                        </div>
+                        <div class="impact-stat">
+                            <span class="impact-number">10ms</span>
+                            <span class="impact-label">Temps réponse</span>
+                        </div>
+                        <div class="impact-stat">
+                            <span class="impact-number">85%</span>
+                            <span class="impact-label">↓ Timeout</span>
+                        </div>
+                    </div>
+
+                    <div class="project-section">
+                        <div class="section-title">
+                            <span class="section-icon">🛠️</span>
+                            Stack Technique
+                        </div>
+                        <div class="tech-stack">
+                            <span class="tech-badge">TypeScript</span>
+                            <span class="tech-badge">Node.js</span>
+                            <span class="tech-badge">Redis</span>
+                            <span class="tech-badge">Docker</span>
+                            <span class="tech-badge">Kubernetes</span>
+                            <span class="tech-badge">ELK</span>
+                        </div>
+                    </div>
+
+                    <div class="project-meta">
+                        <div class="meta-item">
+                            <span>⏱️</span>
+                            <strong>Durée:</strong> 6 mois
+                        </div>
+                        <div class="meta-item">
+                            <span>👥</span>
+                            <strong>Rôle:</strong> Lead Developer
+                        </div>
+                        <div class="meta-item">
+                            <span>📅</span>
+                            <strong>Année:</strong> 2023
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 2: Security Audit -->
+            <div class="project-card" data-category="security">
+                <div class="project-header">
+                    <div>
+                        <div class="project-icon">🔒</div>
+                        <h3>Audit de Sécurité 100% Conforme</h3>
+                        <div class="project-company">
+                            <span>🏢</span> La Poste Groupe
+                        </div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">Sécurité</span>
+                        <span class="tag">Audit</span>
+                        <span class="tag">Conformité</span>
+                    </div>
+                </div>
+                <div class="project-body">
+                    <div class="project-section">
+                        <div class="section-title">
+                            <span class="section-icon">🎯</span>
+                            Challenge
+                        </div>
+                        <div class="section-content">
+                            L'application devait passer un audit de sécurité exigeant sans aucune vulnérabilité détectée. Les enjeux étaient critiques : protection des données sensibles de millions d'utilisateurs et conformité réglementaire stricte.
+                        </div>
+                    </div>
+
+                    <div class="project-section">
+                        <div class="section-title">
+                            <span class="section-icon">🔧</span>
+                            Approche de Sécurisation
+                        </div>
+                        <div class="section-content">
+                            <ul style="list-style-position: inside; margin-top: 0.5rem;">
+                                <li>Mise en place de pratiques de développement sécurisé (OWASP Top 10)</li>
+                                <li>Analyse statique et dynamique du code (SAST/DAST)</li>
+                                <li>Gestion automatisée des dépendances et vulnérabilités (Dependabot, Snyk)</li>
+                                <li>Tests de sécurité approfondis (penetration testing)</li>
+                                <li>Implémentation de correctifs préventifs et hardening</li>
+                                <li>Documentation complète des mesures de sécurité</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="key-results">
+                        <h4>✨ Résultats Clés</h4>
+                        <div class="result-list">
+                            <div class="result-item">✓ Audit de sécurité passé sans aucune vulnérabilité</div>
+                            <div class="result-item">✓ Conformité 100% aux standards de sécurité</div>
+                            <div class="result-item">✓ Processus de sécurité continue mis en place</div>
+                            <div class="result-item">✓ Certification de sécurité obtenue</div>
+                        </div>
+                    </div>
+
+                    <div class="impact-stats">
+                        <div class="impact-stat">
+                            <span class="impact-number">0</span>
+                            <span class="impact-label">Vulnérabilités</span>
+                        </div>
+                        <div class="impact-stat">
+                            <span class="impact-number">100%</span>
+                            <span class="impact-label">Conformité</span>
+                        </div>
+                    </div>
+
+                    <div class="project-section">
+                        <div class="section-title">
+                            <span class="section-icon">🛠️</span>
+                            Stack Technique
+                        </div>
+                        <div class="tech-stack">
+                            <span class="tech-badge">Node.js</span>
+                            <span class="tech-badge">TypeScript</span>
+                            <span class="tech-badge">OWASP</span>
+                            <span class="tech-badge">Snyk</span>
+                            <span class="tech-badge">SonarQube</span>
+                        </div>
+                    </div>
+
+                    <div class="project-meta">
+                        <div class="meta-item">
+                            <span>⏱️</span>
+                            <strong>Durée:</strong> 1 mois
+                        </div>
+                        <div class="meta-item">
+                            <span>👥</span>
+                            <strong>Rôle:</strong> Lead Developer
+                        </div>
+                        <div class="meta-item">
+                            <span>📅</span>
+                            <strong>Année:</strong> 2024
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 3: Testing Coverage -->
+            <div class="project-card" data-category="testing">
+                <div class="project-header">
+                    <div>
+                        <div class="project-icon">✅</div>
+                        <h3>Couverture de Tests 100%</h3>
+                        <div class="project-company">
+                            <span>🏢</span> Numeryx Technologies - Le Conservateur
+                        </div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">Testing</span>
+                        <span class="tag">Qualité</span>
+                        <span class="tag">CI/CD</span>
+                    </div>
+                </div>
+                <div class="project-body">
+                    <div class="project-section">
+                        <div class="section-title">
+                            <span class="section-icon">🎯</span>
+                            Challenge
+                        </div>
+                        <div class="section-content">
+                            Atteindre une couverture de test de 100% tout en assurant la qualité et la stabilité de chaque service et plugin via des tests de bout en bout. L'objectif était de garantir zéro régression en production.
+                        </div>
+                    </div>
+
+                    <div class="project-section">
+                        <div class="section-title">
+                            <span class="section-icon">🔧</span>
+                            Stratégie de Tests
+                        </div>
+                        <div class="section-content">
+                            <ul style="list-style-position: inside; margin-top: 0.5rem;">
+                                <li>Élaboration de tests unitaires exhaustifs pour chaque fonction</li>
+                                <li>Mise en place de tests d'intégration pour les interactions entre services</li>
+                                <li>Tests E2E (End-to-End) pour chaque parcours utilisateur</li>
+                                <li>Automatisation complète dans le pipeline CI/CD</li>
+                                <li>Tests de performance et de charge</li>
+                                <li>Documentation des cas de tests et scénarios</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="key-results">
+                        <h4>✨ Résultats Clés</h4>
+                        <div class="result-list">
+                            <div class="result-item">✓ Couverture de test de 100% atteinte et maintenue</div>
+                            <div class="result-item">✓ Tests E2E sur tous les composants critiques</div>
+                            <div class="result-item">✓ Réduction de 95% des bugs en production</div>
+                            <div class="result-item">✓ Temps de détection des bugs réduit de 80%</div>
+                        </div>
+                    </div>
+
+                    <div class="impact-stats">
+                        <div class="impact-stat">
+                            <span class="impact-number">100%</span>
+                            <span class="impact-label">Couverture</span>
+                        </div>
+                        <div class="impact-stat">
+                            <span class="impact-number">95%</span>
+                            <span class="impact-label">↓ Bugs prod</span>
+                        </div>
+                        <div class="impact-stat">
+                            <span class="impact-number">80%</span>
+                            <span class="impact-label">↓ Temps détection</span>
+                        </div>
+                    </div>
+
+                    <div class="project-section">
+                        <div class="section-title">
+                            <span class="section-icon">🛠️</span>
+                            Stack Technique
+                        </div>
+                        <div class="tech-stack">
+                            <span class="tech-badge">Jest</span>
+                            <span class="tech-badge">Mocha</span>
+                            <span class="tech-badge">Cypress</span>
+                            <span class="tech-badge">Node.js</span>
+                            <span class="tech-badge">TypeScript</span>
+                            <span class="tech-badge">GitLab CI</span>
+                        </div>
+                    </div>
+
+                    <div class="project-meta">
+                        <div class="meta-item">
+                            <span>⏱️</span>
+                            <strong>Durée:</strong> 3 mois
+                        </div>
+                        <div class="meta-item">
+                            <span>👥</span>
+                            <strong>Rôle:</strong> Backend Developer
+                        </div>
+                        <div class="meta-item">
+                            <span>📅</span>
+                            <strong>Année:</strong> 2018-2019
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 4: IoT Smart Agriculture -->
+            <div class="project-card" data-category="iot">
+                <div class="project-header">
+                    <div>
+                        <div class="project-icon">🌱</div>
+                        <h3>IoT & Smart Agriculture - Phyt'eau / IFarming</h3>
+                        <div class="project-company">
+                            <span>🏢</span> Sofia Technologies
+                        </div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">IoT</span>
+                        <span class="tag">Innovation</span>
+                        <span class="tag">Data Analytics</span>
+                    </div>
+                </div>
+                <div class="project-body">
+                    <div class="project-section">
+                        <div class="section-title">
+                            <span class="section-icon">🎯</span>
+                            Challenge
+                        </div>
+                        <div class="section-content">
+                            Développer une application capable de mesurer en temps réel la consommation d'eau d'un terrain agricole pour réduire l'utilisation d'eau. L'objectif initial était de réduire la consommation de 20% en optimisant l'irrigation de précision.
+                        </div>
+                    </div>
+
+                    <div class="project-section">
+                        <div class="section-title">
+                            <span class="section-icon">🔧</span>
+                            Solution Innovante
+                        </div>
+                        <div class="section-content">
+                            <ul style="list-style-position:
